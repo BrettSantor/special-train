@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    letter-spacing: .5px;
+}
+
+.pokemon_container{
+    width: 80%;
+    margin: 4rem auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.pokemon{
+    padding: 2rem;
+    box-shadow: 0 0 .4rem rgba(0,0,0,0.2);
+}
+
+.header{
+    display: flex;
+    padding-top: 4rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete{
+    color:red;
+    
+}
