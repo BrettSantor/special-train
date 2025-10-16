@@ -40,8 +40,9 @@ function createPoke(name){
 
         newTitle.appendChild(newImg);
 
-    let newStat = document.createElement('div');
+    let newStat = document.createElement('ul');
         newStat.id = name+"Stat";
+        newStat.classList.add('stats');
 
         newPoke.appendChild(newStat);
 
@@ -51,6 +52,13 @@ function createPoke(name){
         delBtn.innerHTML = "Delete";
 
         newPoke.appendChild(delBtn);
+
+    let level = document.createElement('button');
+        level.classList.add('level-up');
+        level.onclick = levelUp;
+        level.innerHTML = 'Level Up!';
+
+        newPoke.appendChild(level);
 
 
 }
@@ -71,11 +79,16 @@ function displayStat(data){
    
     let pokeStatBlock = document.getElementById(name+"Stat");
     let statLists = [health, atk, def, spd];
-        
+
+    
     for(let i =0; i<statLists.length; i++){
-        console.log(statLists[i]);
+        let r = /\d+/g;
         let statLi = document.createElement('li');
+        let statVal = parseInt(statLists[i].match(r));
+        
+        statLi.value = statVal;
         statLi.innerText = statLists[i];
+        // stat.id = name+statLists[i];
         pokeStatBlock.appendChild(statLi);
     }
     
@@ -103,6 +116,14 @@ function deleteFunc(event) {
         pokeCard.remove();
     }
 }
+
+
+    // trying to target the list to randomly select 3 and increment. Udes Values to target and incrememnt?
+function levelUp(event){
+    const btn = event.target;
+    const stat = btn.closest('.stats', 'li');
+    // console.log(stat);
+};
 
 
 async function fetchData() {
