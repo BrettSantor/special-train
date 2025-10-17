@@ -172,7 +172,7 @@ function levelDown(event, cardId) {
 
   indices.forEach((i) => {
     let li = statItems[i];
-    if (li.value > 0) {
+    if (li.value > 1) {
       li.value -= 1;
       updateStatText(li);
     }
