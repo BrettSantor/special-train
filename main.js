@@ -1,62 +1,66 @@
-function displayImg(data){
+function displayImg(data, cardId){
     
     let pokemonSprite = data.sprites.front_default;
-    let imgElement = document.getElementById(data.name);
-
+    let imgElement = document.getElementById(`img-${cardId}`);
+console.log(pokemonSprite)
     
     imgElement.src = pokemonSprite;
     imgElement.style.display = "block";
 }
 
-function displayTitle(data){
+function displayTitle(data, cardId){
     let pokemon = data.name;
-    let nameCont = document.getElementById("title-"+`${data.name}`);
+    let nameCont = document.getElementById("title-"+`${cardId}`);
     let newName = document.createElement("h4");
     let pokeTitle = document.createTextNode("Name: " +`${pokemon}`);
     
     newName.appendChild(pokeTitle);
     nameCont.appendChild(newName);
     
-    displayImg(data);
+    displayImg(data, cardId);
     
 }
 
-function createPoke(name){
-
+function createPoke(data, cardId){
     let newPoke = document.createElement('div');
     let container = document.querySelector('.pokemon_container');
+
     newPoke.classList.add('pokemon');
-    newPoke.id = "pokemon-"+`${name}`;
+    newPoke.id = "pokemon-"+`${cardId}`;
         container.appendChild(newPoke);
 
     let newTitle = document.createElement('div');
         newTitle.classList.add('pokemon_title');
-        newTitle.id = "title-"+`${name}`;
+        newTitle.id = "title-"+`${cardId}`;
+
 
         newPoke.appendChild(newTitle);
 
     let newImg = document.createElement('img');
-        newImg.id = name;
+        newImg.id = `img-${cardId}`;
         newImg.alt = "Pokemon Sprite"
+
 
         newTitle.appendChild(newImg);
 
         let level = document.createElement('button');
             level.classList.add('level-up');
-            level.onclick = levelUp;
+            level.dataset.cardId = cardId;
+            level.onclick = function(event){ levelUp(event, cardId)};
             level.innerHTML = 'Level Up!';
     
             newPoke.appendChild(level);
             
             let levelDownBtn = document.createElement('button');
                 levelDownBtn.classList.add('level-down');
-                levelDownBtn.onclick = levelDown;
+                levelDownBtn.dataset.cardId = cardId;
+                levelDownBtn.onclick = function(event){ levelDown(event, cardId)};
                 levelDownBtn.innerHTML = 'Level Down!';
         
         newPoke.appendChild(levelDownBtn);
 
     let newStat = document.createElement('ul');
-        newStat.id = name+"Stat";
+        newStat.id = `stat-${cardId}`;
         newStat.classList.add('stats');
 
         newPoke.appendChild(newStat);
@@ -70,9 +74,9 @@ function createPoke(name){
 
 }
 
-function displayStat(data){
+function displayStat(data, cardId){
 
-    let name = data.name;
+    // let name = data.name;
     let hp = data.stats[0].base_stat;
     let atkStat = data.stats[1].base_stat+data.stats[3].base_stat;
     let defStat = data.stats[2].base_stat+data.stats[4].base_stat;
@@ -84,7 +88,7 @@ function displayStat(data){
     let def = "Def: "+Math.round(defStat/2/total*50);
     let spd = "Spd: "+Math.round(spdStat/total*50);
    
-    let pokeStatBlock = document.getElementById(name+"Stat");
+    let pokeStatBlock = document.getElementById(`stat-${cardId}`);
     let statLists = [health, atk, def, spd];
 
     
@@ -100,11 +104,11 @@ function displayStat(data){
     
 }
 
-function displayMoves(data){
+function displayMoves(data, cardId){
 
-    let name = data.name;
+    // let name = data.name;
     let moveList = document.createElement('ul');
-    let card = document.getElementById("pokemon-"+`${name}`);
+    let card = document.getElementById("pokemon-"+`${cardId}`);
 
     card.appendChild(moveList);
 
@@ -112,7 +116,6 @@ function displayMoves(data){
         
         let moveArr=data.moves[i].version_group_details[0]
       if(moveArr.level_learned_at > 0 && moveArr.level_learned_at < 20){
-        //  console.log(data.moves[i].move.name+" @ " + moveArr.level_learned_at);
         let moveLi = document.createElement('li');
         moveLi.innerText = data.moves[i].move.name+" @ " + moveArr.level_learned_at;
         moveList.appendChild(moveLi);
@@ -124,14 +127,14 @@ function displayMoves(data){
 }
 
 
-function displayType(data){
+function displayType(data, cardId){
     
-    let name = data.name;
+    // let name = data.name;
     let types = data.types;
     
     for(let i =0; i<types.length; i++){
         let typeLi = document.createElement('p');
-        let card = document.getElementById("title-"+`${name}`)
+        let card = document.getElementById("title-"+`${cardId}`)
         typeLi.innerText = "Type: "+`${types[i].type.name}`;
         card.appendChild(typeLi);
     }
@@ -160,19 +163,19 @@ function deleteFunc(event) {
 }
 
 
+// fix statLists to get list items
+function levelUp(event, cardId){
+    const statsList = document.getElementById(`stat-${cardId}`);
+    const statItems = statsList.querySelectorAll('li');
+    console.log(statItems)
 
-function levelUp(event){
-    const btn = event.target;
-    const pokeCard = btn.closest('.pokemon');
-    const statsLists = pokeCard.querySelectorAll('ul.stats > li');
+    if (statItems.length < 3)  return;
 
-    if (statsLists.length < 3)  return;
-
-    const indices = getRandomIndices(statsLists.length, 3);
+    const indices = getRandomIndices(statItems.length, 3);
 
     indices.forEach(i => {
 
-        let li = statsLists[i];
+        let li = statItems[i];
         li.value += 1;
         updateStatText(li);
         
@@ -180,17 +183,16 @@ function levelUp(event){
 
 };
 
-function levelDown(event) {
-    const btn = event.target;
-    const pokeCard = btn.closest('.pokemon');
-    const statsList = pokeCard.querySelectorAll('ul.stats > li');
+function levelDown(event, cardId) {
+       const statsList = document.getElementById(`stat-${cardId}`);
+    const statItems = statsList.querySelectorAll('li');
 
-    if (statsList.length < 3) return;
+    if (statItems.length < 3) return;
 
-    const indices = getRandomIndices(statsList.length, 3);
+    const indices = getRandomIndices(statItems.length, 3);
 
     indices.forEach(i => {
-        let li = statsList[i];
+        let li = statItems[i];
         if (li.value > 0) {
             li.value -= 1;
             updateStatText(li);
@@ -215,12 +217,13 @@ async function fetchData() {
             throw new Error("Could not fetch resource");
         }
         const data = await response.json();
-        
-        createPoke(data.name);
-        displayTitle(data);
-        displayType(data);
-        displayMoves(data);
-        displayStat(data);
+
+        const cardId = `${data.name}-${Date.now()}`;
+        createPoke(data, cardId);
+        displayTitle(data, cardId);
+        displayType(data, cardId);
+        displayMoves(data, cardId);
+        displayStat(data, cardId);
     }
     catch(error){
         console.error(error);
