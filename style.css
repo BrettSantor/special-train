@@ -44,6 +44,7 @@
 .stats li {
     flex: 1;
   margin: 4px 0;
+  padding: 4px;
   text-align: left;
   align-items: center;
 }
@@ -69,6 +70,7 @@
 
 button.delete {
   margin-top: auto;
+  margin-bottom: 10px;
   background-color: #ff4d4d;
   color: white;
   border: none;
