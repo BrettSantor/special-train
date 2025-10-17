@@ -27,6 +27,7 @@
 
 
 .stats {
+    display: flex;
   list-style: none;
   padding: 0;
   margin: 10px 0;
@@ -34,8 +35,10 @@
 }
 
 .stats li {
+    flex: 1;
   margin: 4px 0;
   text-align: left;
+  align-items: center;
 }
 
 .level-up, .level-down {
