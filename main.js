@@ -22,6 +22,7 @@ function displayTitle(data){
 }
 
 function createPoke(name){
+
     let newPoke = document.createElement('div');
     let container = document.querySelector('.pokemon_container');
     newPoke.classList.add('pokemon');
@@ -94,14 +95,37 @@ function displayStat(data){
         
         statLi.value = statVal;
         statLi.innerText = statLists[i];
-        // stat.id = name+statLists[i];
         pokeStatBlock.appendChild(statLi);
     }
     
 }
 
+function displayMoves(data){
+
+    let name = data.name;
+    let moveList = document.createElement('ul');
+    let card = document.getElementById("pokemon-"+`${name}`);
+
+    card.appendChild(moveList);
+
+    for(let i=0; i < data.moves.length; i++){
+        
+        let moveArr=data.moves[i].version_group_details[0]
+      if(moveArr.level_learned_at > 0 && moveArr.level_learned_at < 20){
+        //  console.log(data.moves[i].move.name+" @ " + moveArr.level_learned_at);
+        let moveLi = document.createElement('li');
+        moveLi.innerText = data.moves[i].move.name+" @ " + moveArr.level_learned_at;
+        moveList.appendChild(moveLi);
+
+      }     
+    
+    }
+
+}
+
 
 function displayType(data){
+    
     let name = data.name;
     let types = data.types;
     
@@ -136,7 +160,7 @@ function deleteFunc(event) {
 }
 
 
-    // trying to target the list to randomly select 3 and increment. Udes Values to target and incrememnt?
+
 function levelUp(event){
     const btn = event.target;
     const pokeCard = btn.closest('.pokemon');
@@ -194,8 +218,9 @@ async function fetchData() {
         
         createPoke(data.name);
         displayTitle(data);
-        displayStat(data);
         displayType(data);
+        displayMoves(data);
+        displayStat(data);
     }
     catch(error){
         console.error(error);
