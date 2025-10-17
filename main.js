@@ -40,6 +40,20 @@ function createPoke(name){
 
         newTitle.appendChild(newImg);
 
+        let level = document.createElement('button');
+            level.classList.add('level-up');
+            level.onclick = levelUp;
+            level.innerHTML = 'Level Up!';
+    
+            newPoke.appendChild(level);
+            
+            let levelDownBtn = document.createElement('button');
+                levelDownBtn.classList.add('level-down');
+                levelDownBtn.onclick = levelDown;
+                levelDownBtn.innerHTML = 'Level Down!';
+        
+        newPoke.appendChild(levelDownBtn);
+
     let newStat = document.createElement('ul');
         newStat.id = name+"Stat";
         newStat.classList.add('stats');
@@ -52,14 +66,6 @@ function createPoke(name){
         delBtn.innerHTML = "Delete";
 
         newPoke.appendChild(delBtn);
-
-    let level = document.createElement('button');
-        level.classList.add('level-up');
-        level.onclick = levelUp;
-        level.innerHTML = 'Level Up!';
-
-        newPoke.appendChild(level);
-
 
 }
 
@@ -100,14 +106,26 @@ function displayType(data){
     let types = data.types;
     
     for(let i =0; i<types.length; i++){
-        let typeLi = document.createElement('li');
+        let typeLi = document.createElement('p');
         let card = document.getElementById("title-"+`${name}`)
-        typeLi.innerText = types[i].type.name;
+        typeLi.innerText = "Type: "+`${types[i].type.name}`;
         card.appendChild(typeLi);
     }
 
 
 }
+
+function getRandomIndices(length, count) {
+    const indices = [];
+    while (indices.length < count) {
+        let rand = Math.floor(Math.random() * length);
+        if (!indices.includes(rand)) {
+            indices.push(rand);
+        }
+    }
+    return indices;
+}
+
 
 function deleteFunc(event) {
     const btn = event.target;
@@ -121,9 +139,45 @@ function deleteFunc(event) {
     // trying to target the list to randomly select 3 and increment. Udes Values to target and incrememnt?
 function levelUp(event){
     const btn = event.target;
-    const stat = btn.closest('.stats', 'li');
-    // console.log(stat);
+    const pokeCard = btn.closest('.pokemon');
+    const statsLists = pokeCard.querySelectorAll('ul.stats > li');
+
+    if (statsLists.length < 3)  return;
+
+    const indices = getRandomIndices(statsLists.length, 3);
+
+    indices.forEach(i => {
+
+        let li = statsLists[i];
+        li.value += 1;
+        updateStatText(li);
+        
+    });
+
 };
+
+function levelDown(event) {
+    const btn = event.target;
+    const pokeCard = btn.closest('.pokemon');
+    const statsList = pokeCard.querySelectorAll('ul.stats > li');
+
+    if (statsList.length < 3) return;
+
+    const indices = getRandomIndices(statsList.length, 3);
+
+    indices.forEach(i => {
+        let li = statsList[i];
+        if (li.value > 0) {
+            li.value -= 1;
+            updateStatText(li);
+        }
+    });
+}
+
+function updateStatText(li) {
+    const statName = li.innerText.split(':')[0];
+    li.innerText = `${statName}: ${li.value}`;
+}
 
 
 async function fetchData() {

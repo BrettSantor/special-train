@@ -25,7 +25,49 @@
     align-items: center;
 }
 
-.delete{
-    color:red;
-    
+
+.stats {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.stats li {
+  margin: 4px 0;
+  text-align: left;
+}
+
+.level-up, .level-down {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin: 10px 0;
+  color: white;
+  background-color: rgb(73, 255, 119);
+    border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.level-up:hover, .level-down:hover {
+  background-color: rgb(0, 179, 45)
+}
+
+button.delete {
+  margin-top: auto;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button.delete:hover {
+  background-color: #cc0000;
 }
