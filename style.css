@@ -18,11 +18,18 @@
     box-shadow: 0 0 .4rem rgba(0,0,0,0.2);
 }
 
+.shinyPokemon{
+  filter: drop-shadow( 5px 5px 10px rgba(197, 211, 9, 0.836));
+}
+
 .header{
     display: flex;
     padding-top: 4rem;
     justify-content: center;
     align-items: center;
+    position:sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 

@@ -1,9 +1,36 @@
+const pokemonCache = {};
+
+function renderPokemon(data){
+
+    const cardId = `${data.name}-${Date.now()}`;
+    createPoke(data, cardId);
+    displayTitle(data, cardId);
+    displayType(data, cardId);
+    displayMoves(data, cardId);
+    displayStat(data, cardId);
+
+      const newCard = document.getElementById(`pokemon-${cardId}`);
+  if (newCard) {
+    newCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+}
+
 function displayImg(data, cardId) {
-  let pokemonSprite = data.sprites.front_default;
-  let imgElement = document.getElementById(`img-${cardId}`);
+
+  console.log(data);
+
+            const shouldBecomeShiny = Math.random() < 0.0001220703125;
+            let imgElement = document.getElementById(`img-${cardId}`);
+            let pokemonSprite = data.sprites.front_default;
+            imgElement.style.display = "block";
+
+      if (shouldBecomeShiny) {
+        pokemonSprite = data.sprites.front_shiny;
+        imgElement.classList.add('shinyPokemon');
+      } 
 
   imgElement.src = pokemonSprite;
-  imgElement.style.display = "block";
 }
 
 function displayTitle(data, cardId) {
@@ -190,6 +217,15 @@ async function fetchData() {
       .getElementById("pokemonName")
       .value.toLowerCase();
 
+const sessionData = sessionStorage.getItem(`pokemon-${pokemonName}`);
+  if (sessionData) {
+    const parsedData = JSON.parse(sessionData);
+    pokemonCache[pokemonName] = parsedData;
+    console.log('Loaded from sessionStorage');
+    renderPokemon(parsedData);
+    return;
+  }
+
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${pokemonName}/`
     );
@@ -199,12 +235,12 @@ async function fetchData() {
     }
     const data = await response.json();
 
-    const cardId = `${data.name}-${Date.now()}`;
-    createPoke(data, cardId);
-    displayTitle(data, cardId);
-    displayType(data, cardId);
-    displayMoves(data, cardId);
-    displayStat(data, cardId);
+    pokemonCache[pokemonName] = data;
+    sessionStorage.setItem(`pokemon-${pokemonName}`, JSON.stringify(data));
+    console.log('Fetched from API');
+    renderPokemon(data);
+
+
   } catch (error) {
     console.error(error);
   }
