@@ -1,4 +1,28 @@
 const pokemonCache = {};
+const errorModal = document.getElementById('errorModal');
+const errorMessageElement = document.getElementById('errorMessageElement');
+const closeButton = document.querySelector('.close');
+
+function errorMod(){
+  
+errorMessageElement.textContent = "Oops! No such Pokemon, check your spelling or format!";
+errorModal.style.display = 'block';
+
+}
+
+function closeMod(){
+
+  errorModal.style.display = 'none';
+
+}
+
+closeButton.addEventListener('click', closeMod);
+
+window.addEventListener('click', (event) => {
+if (event.target == errorModal){
+  closeMod();
+}
+});
 
 function renderPokemon(data){
 
@@ -232,6 +256,7 @@ const sessionData = sessionStorage.getItem(`pokemon-${pokemonName}`);
 
     if (!response.ok) {
       throw new Error("Could not fetch resource");
+      errorMod();
     }
     const data = await response.json();
 
@@ -242,6 +267,7 @@ const sessionData = sessionStorage.getItem(`pokemon-${pokemonName}`);
 
 
   } catch (error) {
+    errorMod();
     console.error(error);
   }
 }
