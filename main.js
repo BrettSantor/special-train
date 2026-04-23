@@ -2,6 +2,7 @@ const pokemonCache = {};
 const errorModal = document.getElementById('errorModal');
 const errorMessageElement = document.getElementById('errorMessageElement');
 const closeButton = document.querySelector('.close');
+const shinySound = new Audio("assets/pokeballCatch.mp3")
 
 function errorMod(){
   
@@ -52,6 +53,7 @@ function displayImg(data, cardId) {
       if (shouldBecomeShiny) {
         pokemonSprite = data.sprites.front_shiny;
         imgElement.classList.add('shinyPokemon');
+        shinySound.play();
       } 
 
   imgElement.src = pokemonSprite;
